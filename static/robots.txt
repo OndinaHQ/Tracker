@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /
+Disallow: /*
+Disallow: /humans.txt
+
+User-agent: *
+Crawl-delay: 10

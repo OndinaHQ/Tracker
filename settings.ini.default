@@ -1,0 +1,70 @@
+; All values in this file must be valid Python 3 literals.
+
+; Copying and distribution of this file, with or without modification,
+; are permitted in any medium without royalty provided the copyright
+; notice and this notice are preserved.  This file is offered as-is,
+; without any warranty.
+
+
+[web]
+max_page_size = 30
+; increase the default page size to 10 for production
+default_page_size = 6
+
+; set this to 'ondina' for the ondina-api login plugin
+; or 'null' for no authentication at all. this will show
+; an example user account that can be used for testing
+; locally.
+authentication = 'openid'
+
+; if we are on a staging server, set these.
+; they deafult to "tracker.ondina.co" and
+; "cp.ondina.co" (don't put "http://" or a
+; trailing "/", just the host name (and port if applicable)
+;x_tracker_host = "tracker.ondina-staging"
+;x_control_panel_host = "ondina-staging"
+
+[couchdb]
+username = "tracker"
+password = "$PWD/db.passwd"
+host = "localhost:5984"
+
+[s3]
+; This value must reference a file containing your S3 access ID and
+; access secret key separated by a colon. $PWD will be substituted
+; with the path where server.py is located (e.g. "$PWD/s3.passwd"):
+data = "$PWD/s3.passwd"
+
+; for the /api route, set a secret key
+; WARNING: this will default to "null"
+; this is a good method of generating a fresh secret key:
+; ~$ python3 -c "import uuid;print(uuid.uuid4().hex)"
+[api]
+secret = "null"
+
+[global]
+; for the built-in cherrypy server
+tools.encode.encoding = "utf8"
+server.socket_host = "0.0.0.0"
+server.socket_port = 8080
+
+[/]
+tools.sessions.on = True
+tools.sessions.name = 'cpsession'
+tools.sessions.storage_type = "file"
+; make sure this directory exists:
+tools.sessions.storage_path = "/tmp/tracker-sessions"
+
+; the follwing are just some static directories. add those at will
+; to be able to get to them from the html. big files should be served
+; from apache instead
+
+[/assets]
+tools.caching.on = False
+tools.staticdir.on = True
+tools.staticdir.dir = server.wd + "/assets"
+
+[/static]
+tools.caching.on = False
+tools.staticdir.on = True
+tools.staticdir.dir = server.wd + "/static"

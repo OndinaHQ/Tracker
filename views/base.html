@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang=en>
+    <head>
+        <title>Tracker — Ondina Issue Tracking</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/assets/base.css">
+        <style>
+
+        </style>
+        <script src="/static/jquery-1.7.1.min.js"></script>
+        <script src="/assets/base.js"></script>
+		<link href='http://fonts.googleapis.com/css?family=Istok+Web:400,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="/static/favicon.ico">
+        <script>
+
+        </script>
+    </head>
+    <header>
+        <a href="/">
+            <h1><img src="/assets/ondina.png"></h1>
+            <h2>Issue tracking system</h2>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="/"${" class=\"go\"" if page and page == "/" else ""}>Overview</a></li>
+                <li><a href="/new"${" class=\"go\"" if page and page == "/new" else ""}>Report New Issue</a></li>
+            </ul>
+        </nav>
+    </header>
+    <aside class="banner do-hide">Your first time here? Have a look at our <a href="/introduction">Introduction</a>!
+        <a href="#close-banner" class="close">×</a>
+    </aside>
+    % if page != "error" and page != "/login" and "user" in session:
+    <menu class="login">
+        <span>${(
+            (" <abbr title=\"Admin\">♞</abbr>" if session["user"]["is_admin"] else "") +
+            session["user"]["first_name"] + " " +
+            session["user"]["last_name"])}${" (<a href='/users/{}'>{} issue{} reported</a>)".format(session["user"]["id"], have_issues, "s" if have_issues != 1 else "") if have_issues else ""}</span>
+    </menu>
+    % endif
+    ${self.body()}
+    <footer>
+        <small>Ondina, LLC</small><!-- TODO -->
+        <small>Credit |
+            % if have_issues:
+            <a href="/introduction">Introduction</a>
+            % else:
+            <strong><a href="/introduction">Introduction</a></strong>
+            % endif
+        <span class="ondina-specific">| <a href="http://cp.ondina.co/">Ondina Control Panel</a></span>
+        % if page == "/users":
+        | <a href="http://cp.ondina.co/user/logout">log out</a>
+        % endif
+        </small>
+        <small title="0.999... = 9(1/10) + 9(1/10)^2 + 9(1/10)^3 + ... = (9(1/10))/(1 - (1/10)) = 1">0.(9)</small>
+    </footer>
+</html>

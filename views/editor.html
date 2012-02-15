@@ -1,0 +1,62 @@
+<div class="dialog dialog-image do-hide">
+    <div class="inner-dialog">
+        <strong>Choose an image to upload</strong><a href="#close-dialog" class="close">×</a>
+        <p class="hint noerror">Upload an image file from your computer:</p>
+        <iframe class="upload" src="/img_upload"></iframe>
+    </div>
+</div><div class="dialog dialog-link do-hide">
+    <div class="inner-dialog">
+        <strong>Choose a URL and a title:</strong>
+        <a href="#close-dialog" class="close">×</a>
+        <p class="hint">Enter a helpful link title, if possible</p>
+        <label>URL:</label>
+        <input type=url class="url"><br>
+        <label>Link Title:</label>
+        <input type=text class="link-name"><br>
+        <button>Insert Link</button>
+    </div>
+</div>
+<div class="markdown-help">
+    <div class="simple">
+        <menu class="md-buttons">
+            <a class="md mdx" href="#md-bold" data-hint="**bold text**">
+                <img src="/assets/i/md/bold.png" alt="Bold" title="Bold"></a>
+            <a class="md mdx" href="#md-italics" data-hint="_italics_">
+                <img src="/assets/i/md/italics.png" alt="Italics" title="Italics"></a>
+            <a class="md mdx" href="#md-link" data-hint="[link](http://example.com/)">
+                <img src="/assets/i/md/link.png" alt="Insert Link" title="Insert Link"></a>
+            <a class="md mdx" href="#md-img" data-hint="![image](http://example.com/image.png)">
+                <img src="/assets/i/md/img.png" alt="Insert Image" title="Insert Image"></a>
+            <a class="md mdx" href="#md-pre" data-hint="␣␣␣␣code">
+                <img src="/assets/i/md/pre.png" alt="Code Block" title="Code Block"></a>
+        </menu>
+        <aside class="hint md-hint"></aside>
+        <a class="show-more" href="#markdown">Markdown</a>
+    </div>
+    <div class="more" style="">
+        <p>You can use <strong>Markdown</strong> to format your report.</p>
+        <h4><img class="mdhelp" src="/assets/i/md/link.png">&nbsp;Links</h4>
+        <p>If you want plain links to be clickable, write <code>&lt;http://ondina.co&gt;</code>.<br>
+            Use markdown to create better links: <code>[Ondina](http://ondina.co)</code></p>
+        <h4><img class="mdhelp" src="/assets/i/md/img.png">&nbsp;Images</h4>
+        <p>
+            Images look similar to links, with an exclaimation mark: <code>![Ondina Logo](http://ondina.co/ondina.png)</code></p></p>
+        <h4><img class="mdhelp" src="/assets/i/md/italics.png">
+            &nbsp;<img class="mdhelp" src="/assets/i/md/bold.png">&nbsp;Styling</h4>
+        <p>Use <code>**two asterisks**</code> to make text bold, a single one or a single
+            undercore to format it in <code>_italics_</code>.</p>
+        <h4><img class="mdhelp" src="/assets/i/md/pre.png">&nbsp;Formatting Code</h4>
+        <p>Code within a line of text can be highlighted with <code>`backticks`</code>.
+            If you have a block of code, <strong>indent it by four spaces</strong> or use
+            the code button to make it readable.
+            </p>
+        <a href="#" class="show-less">Go Back...</a>
+    </div>
+</div>
+% if page == "/issue":
+<textarea id="description" name="description" placeholder="" class="md">${issue["description"] if issue else ""}</textarea>
+% elif page == "/new":
+<textarea id="description" name="description" placeholder="" class="md">${prefill["description"] if prefill.get("description") else ""}</textarea>
+% endif
+
+<script src="/assets/mdedit.js"></script>

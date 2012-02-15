@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="/assets/base.css">
+<style>
+    body {
+        overflow: hidden;
+        background: transparent;
+    }
+</style>
+<form method="POST" enctype="multipart/form-data" action="/img_upload">
+    <input type=file name="image"><br>
+    <input type=hidden name="csrf_token" value="${csrf_token}">
+    <input type=submit class="upload" value="Upload Image">
+</form>

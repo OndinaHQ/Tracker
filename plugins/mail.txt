@@ -1,0 +1,3 @@
+A new message has been posted to Tracker:
+
+{{{title}}} <{{{link}}}>

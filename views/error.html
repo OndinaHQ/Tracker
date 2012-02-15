@@ -1,0 +1,24 @@
+<%inherit file="base.html"/>
+<section>
+    <h1>Error ${status}</h1>
+    % if status == "404 Not Found":
+    <p>We're sorry, the page you tried to get does not exist.</p>
+    <p>If you think that something is missing, please <a href="/new">
+        report a new issue</a> or <a href="http://ondina.co/contact"
+        targe="_blank">contact us</a>.</p>
+    % elif status == "500 Internal Server Error":
+    <p>We're sorry, something has gone wrong.</p>
+    <p><strong>This is not your fault, it's ours.</strong>
+        <ul><li>Try refreshing the page.</li>
+        <li>If you want to help us resolve the problem, please try
+        <a href="/new"> reporting a new issue</a> or <a
+        href="http://ondina.co/contact" target="_blank">
+        contact us directly</a>.</li></ul></p>
+        <!---
+            You have found #6 of 100 hidden packages
+            ${traceback}
+        -->
+    % else:
+    <p>${message}</p>
+    % endif
+</section>

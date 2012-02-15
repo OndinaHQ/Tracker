@@ -1,0 +1,566 @@
+body {
+	font-size: 14px;
+    font-family: 'Istok Web', sans-serif;
+    background: #fafafa;
+    max-width: 820px;
+    margin: 0 auto 32px auto;
+    overflow-y: scroll;
+}
+div.dialog {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+div.inner-dialog {
+    width: 300px;
+    height: 132px;
+    margin: 10% auto;
+    background: #fafafa;
+    box-shadow: 2px 2px 6px #000;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 4px;
+}
+input.upload[type=submit] {
+    float: right !important;
+    margin-right: 20px !important;
+}
+div.dialog-link div.inner-dialog {
+    height: 152px;
+}
+div.dialog-link label {
+    width: 80px;
+    display: inline-block;
+}
+input[type=file] {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 4px;
+    width: 300px;
+}
+div.inner-dialog p.hint {
+    margin: 0;
+    color: #c00;
+    height: 32px;
+    line-height: 32px;
+}
+p.hint.noerror {
+    color: #111 !important;
+}
+div.inner-dialog input.url, div.inner-dialog input.link-name {
+    width: 70%;
+}
+div.dialog-link button {
+    float: right;
+    margin: 10px 4px;
+}
+div.inner-dialog iframe {
+    border: none;
+    width: 320px;
+    height: 100px;
+}
+aside.banner {
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 32px;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    line-height: 32px;
+    text-align: center;
+    opacity: 0.9;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1)
+}
+aside.banner a.close, div.dialog a.close {
+    float: right;
+    background: #ccc;
+    color: white;
+    text-decoration: none;
+    font-weight: bold !important;
+    font-family: sans-serif;
+    font-size: 14px;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    line-height: 17px;
+    text-align: center;
+    margin: 8px;
+    border-radius: 8px;
+}
+div.dialog a.close {
+    margin-right: -8px;
+    margin-top: 2px;
+}
+a.md {
+    margin-right: 4px;
+    margin-left: 8px;
+}
+a.md img {
+    height: 16px;
+    width: 16px;
+}
+img.help {
+    box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.7);
+    margin: 16px;
+}
+abbr {
+    border: none;
+}
+a:focus {
+    outline: none;
+}
+pre, code, var, out {
+    font-family: "Droid Sans Mono";
+}
+a {
+    text-decoration: none;
+    color: #c00;
+}
+header {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    margin-top: -1px;
+}
+header h1 {
+    margin: 12px 12px 0px 12px;
+}
+header h2 {
+    margin: -16px 0 12px 32px;
+}
+header a {
+    color: black;
+    text-decoration: none;
+}
+header a h1 {
+    font-size: 19px;
+}
+section {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 0px 32px 32px 32px;
+    margin-top: 12px;
+}
+header nav ul
+{
+	list-style: none;
+	padding: 10px;
+	float: right;
+	margin-right: 32px;
+
+    margin-top: -72px;
+}
+
+header nav ul li
+{
+	float: left;
+	margin-left: 12px;
+}
+pre {
+    overflow-x: auto;
+}
+header nav ul li a
+{
+	padding: 6px 12px 4px 12px;
+	border: 1px solid #000;
+	background: #333;
+	color: white;
+	border-radius: 4px;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+header nav ul li a:hover 
+{
+	background: #d33;
+	border: 1px solid #333;
+	text-decoration: none;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+header nav ul li a.go 
+{
+	border: 1px solid #b10079;
+	background: #c00;
+}
+header nav ul li a.go:hover 
+{
+	background: #e44;
+	text-decoration: none;
+	border: 1px solid #008ed0;
+}
+ul.issues {
+    margin: 12px;
+    padding: 0;
+    list-style: none;
+}
+ul.issues li {
+    margin-bottom: 12px;;
+}
+ul.issues li a {
+    font-size: 17px;
+}
+ul.tags {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ul.tags li {
+    display: inline-block;
+}
+ul.tags a {
+    display: inline-block;
+    background: #f5f5f5;
+    border-radius: 3px;
+    line-height: 16px;
+    font-size: 12px !important;
+    color: black;
+    padding: 0 6px 0 6px;
+    border: 1px solid #ccc;
+    -moz-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    -webkit-transition: color 0.2s;
+}
+ul.tags a:hover {
+    background: #f7f7f7;
+    color: #008ed0;
+}
+ul.tags li.special a {
+    background: #f63;
+    border: 1px solid #222;
+    color: black;
+}
+ul.tags li.special a:hover {
+    background: #f86;
+    border: 1px solid #222;
+    color: black;
+}
+ul.issues aside.info {
+    color: #333;
+}
+.issue-tags {
+    margin: 32px 0 12px -20px !important;
+}
+div.new.title * {
+    font-size: 17px;
+}
+div.new input[type=text], div.new input[type=url] {
+    width: 40%;
+    padding: 5px;
+}
+div.new.title input {
+    width: 70%;
+}
+textarea[name=description] {
+    display: block;
+    width: 98%;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    height: 400px;
+    padding: 5px;
+}
+form.comment textarea {
+    display: block;
+}
+div.new label {
+    font-weight: bold;
+    margin-right: 8px;
+}
+div.new.tags label {
+    display: block;
+}
+div.new.security {
+    margin-top: 12px;
+}
+input[type=submit] 
+{
+	padding: 5px;
+    margin-top: 8px;
+}
+form.new-issue input[type=submit] {
+    margin: 16px 0 32px 0;
+}
+label small {
+    display: block;
+    font-weight: normal;
+}
+input:hover, select:hover, textarea:hover
+{
+	/*background-color: #fcfcfc;*/
+}
+
+input[type=text], input[type=email], input[type=url], input[type=password], textarea
+{
+	border: 1px solid #ccc;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+
+input[type=text]:focus, input[type=email]:focus, input[type=url]:focus, input[type=password]:focus, textarea:focus
+{
+	border: 1px solid #0079b1;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+input[type=submit], button {
+	padding: 6px 12px 6px 12px;
+	border: 1px solid #ccc;
+	background: #eee;
+	color: #111;
+	border-radius: 4px;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+input[type=submit]:hover, button:hover {
+    background: #f7f7f7;
+	text-decoration: none;
+	-moz-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+}
+div.markdown-help {
+    clear: both;
+    margin-left: 12px;
+    height: 64px;
+    margin-bottom: -28px;
+    padding-top: 32px;
+    margin-top: -32px;
+    margin-bottom: -38px;
+}
+div.markdown-help a.show-more {
+    float: right;
+    margin-right: 12px;
+}
+img.mdhelp {
+    margin-top: 5px;
+}
+menu.md-buttons {
+    clear: both;
+    float: left;
+    padding: 0 0 8px 0;
+    margin: 0;
+}
+aside.md-hint {
+    float: left;
+    margin-top: 0px;
+    margin-left: 24px;
+    opacity: 0.75;
+}
+aside.md-hint:hover {
+    opacity: 1;
+}
+div.simple {
+    clear: both;
+}
+div.more {
+    float: left;
+}
+div.more img {
+    margin-bottom: -4px;
+}
+div.more a.show-less {
+    padding: 6px;
+    display: inline-block;
+}
+menu.login {
+    height: 44px;
+    line-height: 44px;
+    margin: 0 44px -13px 0;
+    padding: 0;
+}
+menu.login span {
+    float: right;
+    margin: 0;
+}
+
+aside.pageno {
+    float: right;
+    margin-top: -37px;
+}
+nav.pages ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+nav.pages ul li {
+    display: inline-block;
+}
+nav.pages ul li a {
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    height: 24px;
+    padding-right: 1px;
+    min-width: 23px;
+    line-height: 24.5px;
+    border: 1px solid #ccc;
+}
+nav.pages ul li a.go {
+    background: #f5f5f5;
+    font-weight: bold;
+}
+nav.pages ul li a:hover {
+    background: #f5f5f5;
+}
+article {
+}
+article pre, article code {
+    font-size: 13px;
+    background: #f7f7f7;
+    border: 1px solid #eee;
+    padding: 3px;
+}
+article pre code {
+    border: none;
+}
+article div.desc {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding-left: 24px;
+    padding-right: 12px;
+}
+article div.desc img {
+    max-width: 480px;
+    max-height: 360px;
+}
+div.comment {
+    padding-left: 24px;
+}
+div.comment aside {
+    margin: -12px 0 0 0;
+    color: #777;
+}
+form.comment {
+    padding-left: 24px;
+}
+form.comment textarea {
+    width: 60%;
+    height: 140px;
+    padding: 5px;
+}
+menu.issue-options {
+    margin: 2px 0 0 12px;
+    padding: 0;
+}
+menu.issue-options ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline-block;
+}
+menu.issue-options ul li {
+    display: inline-block;
+}
+aside.issue-meta {
+    float: right;
+    color: #777;
+    margin-top: -20px;
+    margin-right: 4px;
+}
+menu.issue-options ul li a {
+    margin-right: 12px;
+}
+form.dupe, form.delete {
+    padding: 24px;
+}
+form.dupe input[type=text] {
+    width: 300px;
+    display: block;
+}
+div.error {
+    color: #c00;
+}
+a.dismiss {
+    float: right;
+}
+aside.affects, aside.womm {
+    float: right;
+    overflow: hidden;
+}
+li.deleted {
+    opacity: 0.3;
+}
+li.deleted a.issue-link {
+    text-decoration: line-through;
+}
+li.deleted:hover {
+    opacity: 0.9;
+}
+h2.deleted {
+    text-decoration: line-through;
+}
+aside.edit-note {
+    margin: 2px;
+    color: #c00;
+}
+a.disabled {
+    color: #ccc;
+    cursor: default;
+}
+.do-hide {
+    visibility: hidden;
+}
+div.link {
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+}
+input.link {
+    width: 260px;
+}
+img.status {
+    margin-bottom: -2px;
+    margin-right: 4px;
+}
+.infobox {
+    width: 400px;
+    color: #444;
+    padding-left: 8px;
+    padding-top: 2px;
+    border-left: 5px solid #ddd;
+}
+ul.status {
+    list-style: none;
+}
+img.logo-small {
+    margin-bottom: -2px;
+}
+footer 
+{
+    clear: both;
+	color: #666;
+	margin: 8px;
+	text-align: center;
+}
+
+footer small:last-child
+{
+	float:right;
+}
+
+footer small:first-child
+{
+	float:left;
+}
+textarea {
+    font-family: "Droid Sans Mono", monospace;
+}
+.ondina-specific {
+    display: none;
+}

@@ -1,0 +1,62 @@
+<%inherit file="base.html"/>
+<section>
+    % if page == "/":
+    <h1>Recent Issues</h1>
+    % elif page == "/tags":
+    <h1>${issues["total"]} issue${"s" if issues["total"] != 1 else ""} tagged '${c_tag}'</h1>
+    % elif page == "/users":
+    <h1>${issues["total"]} issue${"s" if issues["total"] != 1 else ""} reported by ${name if not me else "you"}</h1>
+    % endif
+    <ul class="issues">
+    % for issue in (i["doc"] for i in issues["rows"]):
+        <% if (issue.get("deleted") and not session["user"]["is_admin"]) or ("hidden-issue" in issue["tags"] and not session["user"]["is_admin"]):
+    continue %>
+        <% st, dt = date_delta(issue["date"]) %>
+        <li${" class=\"deleted\"" if issue.get("deleted") else ""}>
+            % if issue["status"] == "resolved":
+            <img title="This issue has been resolved"
+                class="status"src="/assets/i/checkmark-green.png">
+            % elif issue["status"] == "incomplete":
+            <img title="This issue is incomplete"
+                class="status"src="/assets/i/cross-yellow.png">
+            % endif
+            <a class="issue-link" href="/issue/${issue["_id"].split("-")[1]}/${escape_link(issue["title"])}">${issue["title"]}</a>
+            <aside class="info">Posted <abbr title="${st}">${dt}</abbr>
+                by ${get_user(issue["owner"]).get("first_name")} ${get_user(issue["owner"]).get("last_name")}, affects ${len(issue["affects"])}
+                ${"person" if len(issue["affects"]) == 1 else "people"} (${len(issue.get("comments") or [])}
+                ${"comment" if len(issue.get("comments") or []) == 1 else "comments"}).
+            <ul class="tags">
+            % for tag in (i for i in issue["tags"] if (i not in invisible_tags if not session["user"]["is_admin"] else True)):
+                <li${" class=\"special\"" if tag in ("hidden-issue", ) else ""}>
+                    <a href="/tags/${uquote(tag)}">${tag}</a></li>
+            % endfor
+            </ul>
+        </li>
+    % endfor
+    </li>
+    <nav class="pages"><ul>
+    <%
+        link = "/page" if page == "/" else "/tags/" + tag_id + "/page" if page == "/tags" else "/users/" + user_id + "/page"
+        pages_all = list(range(1, issues["pages"] + 1))
+        pages_show = range(issues["page"] - 2, issues["page"] + 6)
+        pages_show = list(i for i in pages_show if i in pages_all)
+        pages_show = set([1] + pages_show + [issues["pages"]])
+        pages_show = list(sorted(set(pages_show)))
+        if 0 in pages_show:
+            pages_show.remove(0)
+        last = 0
+    %>
+    % for i in pages_show:
+        % if i != last + 1:
+            <li>...</li>
+        % endif
+        <li><a ${"class=\"go\"" if i == issues["page"] else ""} href="${link}/${i}">${i}</a></li>
+        <% last = i %>
+    % endfor
+    </ul>
+    % if page == "/tags" or page == "/users":
+        or <a href="/">view all issues</a>
+    % endif
+    </nav>
+    <aside class="pageno">Page ${issues["page"]} of ${issues["pages"]}</aside>
+</section>

@@ -1,0 +1,267 @@
+<%inherit file="base.html"/>
+<section>
+    <article class="issue" id="${issue["_id"]}">
+        <h2${" class=\"deleted\"" if issue["deleted"] else ""}><span class="edit">Editing: </span>
+        % if issue["status"] == "resolved":
+        <img title="This issue has been resolved"
+            class="status"src="/assets/i/checkmark-green.png">
+        % elif issue["status"] == "incomplete":
+        <img title="This issue is incomplete"
+            class="status"src="/assets/i/cross-yellow.png">
+        % endif
+    <a href="/issue/${issue["_id"].split("-")[1]}">${issue["title"]}</a></h2>
+        <span class="affected">
+            <aside class="affects${" hide" if int(session["user"]["id"]) not in issue["affects"] else ""}">This issue affects you (<a href="#womm">change</a>)</aside>
+            <aside class="womm${" hide" if int(session["user"]["id"]) in issue["affects"] else ""}"><a href="#affects">Does this issue affect you?</a></aside>
+        </span>
+        % if session.get("error") and session["error"] == "dupe_id":
+        <div class="error infobox">Sorry, this issue isn't recognized. Try entering the issue's ID or the entire URL.<a href="" class="dismiss">(dismiss)</a></div>
+            <% session.pop("error") %>
+        % endif
+        % if error and error == "server":
+        <div class="error infobox">Sorry, an unexpected error has occured. Do you want to <a href="/new">file an issue about it</a>?<a href="" class="dismiss">(dismiss)</a></div>
+        % elif error and error == "client":
+        <div class="error infobox">Sorry, you can't delete issues at this time. Please post a comment instead.<a href="" class="dismiss">(dismiss)</a></div>
+        % endif
+        % if issue["status"] == "incomplete":
+        <p class="infobox">This issue is incomplete. If you can reproduce it, help us by adding a comment
+            and providing more information.</p>
+        % elif issue["status"] == "progress":
+        <p class="infobox"><img alt="Ondina" class="logo-small" src="/assets/i/ondina-small.png"> is currently working on resolving this issue.<br>When the problem is fixed, you will see a green check mark on this page.</p>
+        % endif
+        % if len(issue["affects"]) in (0, 1):
+        <h3 class="desc">Issue Description</h3>
+        % else:
+        <h3 class="desc">This issue affects ${len(issue["affects"])}
+                ${"person" if len(issue["affects"]) == 1 else "people"}</h3>
+        % endif
+        <div class="desc">
+            ${issue_text_html}
+        <ul class="tags issue-tags">
+        % for tag in (i for i in issue["tags"] if (i not in invisible_tags if not session["user"]["is_admin"] else True)):
+            <li${" class=\"special\"" if tag in ("hidden-issue", ) else ""}>
+                <a href="/tags/${uquote(tag)}">${tag}</a></li>
+        % endfor
+        </ul>
+        </div>
+    </article>
+    <form class="edit new-issue" action="/update_issue" method="POST">
+        <input type="hidden" name="issue" value="${issue["_id"]}">
+        <div class="new title">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" placeholder="Can you sum up the issue in 7 words?" value="${issue["title"]}">
+        </div>
+        % if issue["deleted"]:
+            <aside class="edit-note">Editing this issue won't un-delete it</aside>
+        % endif
+        <h3>Issue Description</h3>
+        <%include file="editor.html"/>
+        <div class="new tags">
+            <label for="tags">Tags<small>Make your tags count! You don't need to include tags such as 'error' or 'bug'.</small></label>
+            <input type="text" id="tags" name="tags" placeholder="Example: dns, database-users, security" value="${", ".join(i for i in issue["tags"] if i != "hidden-issue")}">
+        </div>
+        <div class="new security">
+            <input type="checkbox" id="security" name="hidden"${" checked=\"checked\"" if "hidden-issue" in issue["tags"] else ""}>
+            <label for="security">Mark as security issue<small>
+                Security issues will not be publicly visible.</small></label>
+        </div>
+        <input type="submit" value="Update Issue"> or <a href="#cancel">cancel editing</a>
+    </form>
+    <div class="noedit">
+        <form class="dupe" method="post" action="/mark_dupe">
+            <label for="dupe">Please paste the URL of the original, duplicated issue: </label>
+            <input type=text id="dupe" name="dupe">
+            <input type=hidden name="issue" value="${issue["_id"]}">
+            <input type="submit"> or <a href="#cancel-dupe">cancel</a>
+        </form>
+        % if issue["deleted"]:
+        <form class="delete" method="post" action="/mark_undelete">
+            <label for="sure">Do you want to <em>undelete</em> this issue?</label>
+            <input type=hidden name="issue" value="${issue["_id"]}">
+            <input type="submit" value="Yes"> or <a href="#cancel-delete">cancel</a>
+        </form>
+        % elif not issue["deleted"]:
+        <form class="delete" method="post" action="/mark_delete">
+            <label for="sure">Are you sure this issue should be deleted?</label>
+            <input type=hidden name="issue" value="${issue["_id"]}">
+            <input type="submit" value="Yes"> or <a href="#cancel-delete">cancel</a>
+        </form>
+        % endif
+        <form class="status" method="post" action="/change_status">
+            <ul class="status">
+                <li><input type=radio name=status value=new id=status-new${" checked" if issue["status"] == "new" else ""}>
+                    <label for=status-new>New</label></li>
+
+                <li><input type=radio name=status value=incomplete id=status-incomplete${" checked" if issue["status"] == "incomplete" else ""}>
+                    <label for=status-incomplete>Incomplete</label></li>
+
+                <li><input type=radio name=status value=progress id=status-progress${" checked" if issue["status"] == "progress" else ""}>
+                    <label for=status-progress>In Progress</label></li>
+
+                <li><input type=radio name=status value=resolved id=status-resolved${" checked" if issue["status"] == "resolved" else ""}>
+                    <label for=status-resolved>Resolved</label></li>
+
+            </ul>
+            <input type=hidden name="issue" value="${issue["_id"]}">
+            <input type="submit" value="Change"> or <a href="#cancel-status">cancel</a>
+        </form>
+        <menu class="issue-options">
+            <div class="link"><input type=text class="link" value="${base_url}/issue/${issue['_id'].split("-")[1]}"> (<a href="#dismiss-link">dismiss</a>)</div>
+            <ul>
+                <li><a href="#link">Link</a></li>
+                % if issue["owner"] == session["user"]["id"] or session["user"].get("is_admin"):
+                <li><a href="#edit">Edit</a></li>
+                % endif
+                % if session["user"].get("is_admin"):
+                <li><a href="#dupe">Duplicate</a></li>
+                <li><a href="#delete">${"Delete" if not issue["deleted"] else "Undelete"}</a></li>
+                <li><a href="#status">Status</a></li>
+                % endif
+            </ul>
+        <% st, dt = date_delta(issue["date"]) %>
+        </menu><% revs = (issue.get("edit_count") or 0)
+revs = (" (edited %d time%s)" % (revs, "s" if revs != 1 else "")) if revs >= 1 else ""
+    %>    <aside class="issue-meta">Posted <abbr title="${st}">${dt}</abbr> by <a href="/users/${get_user(issue["owner"])["id"]}">${get_user(issue["owner"])["first_name"]} ${get_user(issue["owner"])["last_name"]}</a>${revs.replace("1 time", "once").replace("2 times", "twice")}</aside>
+        % if issue["dupes"]:
+        <h3 class="dupe">Duplicate issues</h3>
+        <p>This issue has been marked as a duplicate of:</p>
+        <ul>
+            % for i in issue["dupes"]:
+                <% i_title = get_title(i) %>
+                % if i_title:
+                    <li><a href="${base_url}${i}">${i_title}</a></li>
+                % endif
+            % endfor
+        </ul>
+        % endif
+        % if issue.get("comments"):
+            <h3>Comments</h3>
+            % for comment in issue["comments"]:
+            <div class="comment">
+                <p>
+                    ${escape(comment["comment"])}
+                </p><% st, dt = date_delta(issue["date"]) %>
+                <aside>Posted <abbr title="${st}">${dt}</abbr> ago by ${get_user(comment["user"])["first_name"]} ${get_user(comment["user"])["last_name"]}</aside>
+            </div>
+            % endfor
+        % endif
+        <h3>Post a${"nother" if issue.get("comments") else ""} comment:</h3>
+        <form class="comment" method="POST" action="/comment">
+            <textarea name="comment"></textarea>
+            <input type=hidden name="issue" value="${issue["_id"]}">
+            <input type="submit" value="Post Comment">
+        </form>
+    </div>
+</section>
+<script>
+    $(function () {
+        var origTitle = $("input#title").val();
+        var origDescription = $("textarea#description").val();
+        var origTags = $("input#tags").val();
+        $(".do-hide").removeClass("do-hide").hide();
+        $("form.edit").hide();
+        $("span.edit").hide();
+        $("form.dupe").hide();
+        $("form.delete").hide();
+        $("form.status").hide();
+        $(".hide").hide();
+        $("menu.issue-options a[href=#edit]").click(function (e) {
+            e.preventDefault();
+            $("div.desc").slideUp("fast", function () {
+                $("form.edit").slideDown("fast");
+                $("h3.desc").slideUp("fast");
+                $("span.edit").show("fast");
+                $("menu.issue-options").slideUp("fast");
+                $("body").scrollTop(128);
+                $("span.affected").hide();
+                $("div.noedit").slideUp("fast");
+            });
+        });
+        $("a[href=#cancel]").click(function (e) {
+            e.preventDefault();
+            $("div.desc").slideDown("fast", function () {
+                $("input#title").val(origTitle);
+                $("textarea#description").val(origDescription);
+                $("input#tags").val(origTags);
+                $("form.edit").slideUp("fast");
+                $("h3.desc").slideDown("fast");
+                $("span.edit").hide("fast");
+                $("menu.issue-options").slideDown("fast");
+                $("body").scrollTop(0);
+                $("span.affected").show();
+                $("div.noedit").slideDown("fast");
+            });
+        });
+        $("a[href=#dupe]").click(function (e) {
+            e.preventDefault();
+            $("form.dupe").slideDown("fast");
+            $("menu.issue-options").slideUp("fast");
+        });
+        $("a[href=#cancel-dupe]").click(function (e) {
+            e.preventDefault();
+            $("form.dupe").slideUp("fast");
+            $("menu.issue-options").slideDown("fast");
+        });
+        $("a[href=#delete]").click(function (e) {
+            e.preventDefault();
+            $("form.delete").slideDown("fast");
+            $("menu.issue-options").slideUp("fast");
+        });
+        $("a[href=#cancel-delete]").click(function (e) {
+            e.preventDefault();
+            $("form.delete").slideUp("fast");
+            $("menu.issue-options").slideDown("fast");
+        });
+        $("a[href=#status]").click(function (e) {
+            e.preventDefault();
+            $("form.status").slideDown("fast");
+            $("menu.issue-options").slideUp("fast");
+        });
+        $("a[href=#cancel-status]").click(function (e) {
+            e.preventDefault();
+            $("form.status").slideUp("fast");
+            $("menu.issue-options").slideDown("fast");
+        });
+        $("a[href=#womm]").click(function (e) {
+            if ($("a[href=#womm]").hasClass("disabled")) { return false; };
+            $("a[href=#womm]").addClass("disabled");
+            e.preventDefault();
+            $.post("/mark_womm", {"issue": $("article.issue").attr("id")}, function (r) {
+                $("aside.affects").hide("fast", function () {
+                    $("aside.womm").show("fast");
+                    $("a[href=#womm]").removeClass("disabled");
+                });
+            }).error(function () {
+                $("a[href=#womm]").removeClass("disabled");
+            });
+        });
+        $("a[href=#affects]").click(function (e) {
+            if ($("a[href=#affects]").hasClass("disabled")) { return false; };
+            $("a[href=#affects]").addClass("disabled");
+            e.preventDefault();
+            $.post("/mark_affects", {"issue": $("article.issue").attr("id")}, function (r) {
+                $("aside.womm").hide("fast", function () {
+                    $("aside.affects").show("fast");
+                    $("a[href=#affects]").removeClass("disabled");
+                });
+            }).error(function () {
+                $("a[href=#affects]").removeClass("disabled");
+            });
+        });
+        $("div.link").hide();
+        var link = $("div.link input").val();
+        $("a[href=#link]").click(function (e) {
+            e.preventDefault();
+            $("div.link input").val(link);
+            $("menu.issue-options li").animate({"width": "hide"}, "fast");
+            $("div.link").animate({"width": "show"}, "fast", function () {
+                $("input.link").focus().select();
+            });
+        });
+        $("a[href=#dismiss-link]").click(function (e) {
+            e.preventDefault();
+            $("div.link").animate({"width": "hide"}, "fast");
+            $("menu.issue-options li").animate({"width": "show"}, "fast");
+        });
+    });
+</script>
